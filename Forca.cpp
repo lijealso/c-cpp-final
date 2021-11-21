@@ -22,37 +22,53 @@ int letrasAcertadas = 0;
 int tentativasFalhadas;
 bool jogo_gravado;
 
-string gravar_jogo()
+class Dados
 {
-    // cria e abre um ficheiro de texto
-	ofstream ficheiro("dados.txt");
+    public:
+        int temaEscolhido;
+        string palavraEscolhida;
+        string palavraEscondida;
+        int tentativaFalhadas;
+        bool jogoGravado;
 
-	// Escreve no ficheiro
-	ficheiro << tema_escolhido << "\n";
-	ficheiro << palavra_escolhida << "\n";
-    ficheiro << palavra_escondida << "\n";
-    ficheiro << tentativasFalhadas << "\n";
-    ficheiro << jogo_gravado;
+    public:
+        Dados(){}
 
-	// Fecha o ficheiro
-	ficheiro.close();
+        void gravarJogo()
+        {
+            // cria e abre um ficheiro de texto
+            ofstream ficheiro("dados.txt");
 
-    return "Dados gravados com sucesso...";
+            // Escreve no ficheiro
+            ficheiro << temaEscolhido << "\n";
+            ficheiro << palavraEscolhida << "\n";
+            ficheiro << palavraEscondida << "\n";
+            ficheiro << tentativaFalhadas << "\n";
+            ficheiro << jogoGravado;
+
+            // Fecha o ficheiro
+            ficheiro.close();
 }
 
-int carregarJogo()
+void carregarJogo()
 {
 
     ifstream ficheiro ("dados.txt");
 
-        while ( !ficheiro.eof() )
+    while ( !ficheiro.eof() )
     {
-        ficheiro >> tema_escolhido;
-        ficheiro >> palavra_escolhida;
-        ficheiro >> palavra_escondida;
-        ficheiro >> tentativasFalhadas;
-        ficheiro >> jogo_gravado;
+        ficheiro >> temaEscolhido;
+        ficheiro >> palavraEscolhida;
+        ficheiro >> palavraEscondida;
+        ficheiro >> tentativaFalhadas;
+        ficheiro >> jogoGravado;
     }
+
+    tema_escolhido = temaEscolhido;
+    palavra_escolhida = palavraEscolhida;
+    palavra_escondida = palavraEscondida;
+    tentativasFalhadas = tentativaFalhadas;
+    jogo_gravado = jogoGravado;
 
     cout << "Tema: " << tema_escolhido << endl;
     cout << "Palavra escolhida: " << palavra_escolhida << endl;
@@ -60,7 +76,10 @@ int carregarJogo()
     cout << "Tentativas falahadas: " << tentativasFalhadas << endl;
     cout << "Jogo gravado: " << jogo_gravado << endl;
 
-    system("pause");}
+    system("pause");
+    }
+
+};
 
 int menu_inicial()
 {
@@ -162,6 +181,7 @@ string escolher_palavra()
 
 int jogo()
 {
+    Dados d1;
     cout << "Já estamos dentro da funcao jogo..." << endl;
     cout << "A palavra escolhida foi: " << palavra_escolhida << endl;
 
@@ -196,9 +216,12 @@ int jogo()
         system("pause");
         if (resposta == 's')
         {
-            jogo_gravado = 1;
-            string gravado = gravar_jogo();
-            cout << gravado << endl;
+            d1.temaEscolhido = tema_escolhido;
+            d1.palavraEscolhida = palavra_escolhida;
+            d1.palavraEscondida = palavra_escondida;
+            d1.tentativaFalhadas= tentativasFalhadas;
+            d1.jogoGravado = 1;
+            d1.gravarJogo();
         }
         else
         {
@@ -267,6 +290,7 @@ int jogo()
 
 int main(void)
 {
+    Dados d1;
     int opcao_menu_inicial;
 
     opcao_menu_inicial = menu_inicial();
@@ -309,7 +333,7 @@ int main(void)
 
         case 3: // Carregar jogo gravado
             cout << "Carregar jogo gravado" << endl;
-            carregarJogo();
+            d1.carregarJogo();
             cout << "Jogo carregado..." << endl;
             jogo();
             break;
